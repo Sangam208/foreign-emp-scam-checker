@@ -1,14 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:foreign_emp_scam_checker/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:foreign_emp_scam_checker/features/auth/presentation/screens/login_screen.dart';
+import 'package:foreign_emp_scam_checker/init_dependencies.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
+  await initDependencies();
+
+  runApp(
+    BlocProvider(
+      create: (context) => serviceLocator<AuthBloc>(),
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
