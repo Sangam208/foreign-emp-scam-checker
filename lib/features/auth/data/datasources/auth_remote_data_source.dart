@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:foreign_emp_scam_checker/core/config/app_config.dart';
 import 'package:foreign_emp_scam_checker/core/errors/exceptions.dart';
@@ -35,7 +33,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       var response = await _client.post(
         '$host/api/signup',
         options: Options(headers: {'Content-Type': 'application/json'}),
-        data: idToken,
+        data: {"idToken": idToken},
       );
 
       if (response.data == null) {
@@ -43,8 +41,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       }
 
       final newUser = user.copyWith(
-        uid: jsonDecode(response.data)['user']['_id'],
-        token: jsonDecode(response.data)['token'],
+        uid: response.data['user']['_id'],
+        token: response.data['token'],
       );
       return UserModel.fromJson(newUser.toJson());
     } on GoogleSignInException catch (e) {
@@ -57,9 +55,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         );
       }
       final statusCode = e.response?.statusCode;
-      throw ServerException("Sign in Failed $statusCode");
+      throw ServerException("Sign in failed: $statusCode");
     } catch (e) {
-      throw ServerException(e.toString());
+      throw ServerException("Err: ${e.toString()}");
     }
   }
 }

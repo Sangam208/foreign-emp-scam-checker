@@ -5,8 +5,6 @@ import 'package:foreign_emp_scam_checker/features/auth/data/datasources/auth_rem
 import 'package:foreign_emp_scam_checker/features/auth/domain/repositories/auth_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
-import 'dart:developer' as logger;
-
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource _authRemoteDataSource;
   AuthRepositoryImpl(this._authRemoteDataSource);
@@ -17,7 +15,6 @@ class AuthRepositoryImpl implements AuthRepository {
       final user = await _authRemoteDataSource.signInWithGoogle();
       return right(user);
     } on ServerException catch (e) {
-      logger.log(e.message);
       return left(Failure(e.message));
     }
   }
