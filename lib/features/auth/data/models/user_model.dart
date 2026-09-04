@@ -19,6 +19,7 @@ class UserModel extends User {
       'profilePic': profilePic,
       'uid': uid,
       'token': token,
+      'idToken': idToken,
     };
   }
 
