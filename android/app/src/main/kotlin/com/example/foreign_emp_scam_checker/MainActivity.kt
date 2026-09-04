@@ -1,4 +1,4 @@
-package com.example.foreign_emp_scam_checker
+package com.example.jobguard
 
 import io.flutter.embedding.android.FlutterActivity
 
