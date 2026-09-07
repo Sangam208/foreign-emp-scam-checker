@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:foreign_emp_scam_checker/auth_gate.dart';
+import 'package:foreign_emp_scam_checker/core/cubit/app_user_cubit.dart';
 import 'package:foreign_emp_scam_checker/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:foreign_emp_scam_checker/features/auth/presentation/screens/login_screen.dart';
 import 'package:foreign_emp_scam_checker/init_dependencies.dart';
 
 void main() async {
@@ -11,8 +12,15 @@ void main() async {
   await initDependencies();
 
   runApp(
-    BlocProvider(
-      create: (context) => serviceLocator<AuthBloc>(),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => serviceLocator<AuthBloc>(),
+        ),
+        BlocProvider(
+          create: (context) => serviceLocator<AppUserCubit>(),
+        ),
+      ],
       child: const MyApp(),
     ),
   );
@@ -29,7 +37,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const LoginScreen(),
+      home: const AuthGate(),
     );
   }
 }
