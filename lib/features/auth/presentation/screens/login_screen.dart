@@ -4,7 +4,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:foreign_emp_scam_checker/core/common/widgets/loader.dart';
 import 'package:foreign_emp_scam_checker/core/utils/show_toast.dart';
 import 'package:foreign_emp_scam_checker/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:foreign_emp_scam_checker/features/auth/presentation/screens/sample.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -21,16 +20,6 @@ class _LoginScreenState extends State<LoginScreen> {
         child: BlocConsumer<AuthBloc, AuthState>(
           listener: (context, state) {
             if (state is AuthFailure) showToast(state.message);
-            if (state is AuthSuccess) {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Sample(
-                    token: state.user.idToken,
-                  ),
-                ),
-              );
-            }
           },
           builder: (context, state) {
             return state is AuthLoading
