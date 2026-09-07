@@ -6,8 +6,8 @@ import 'package:fpdart/fpdart.dart';
 
 class UserSignIn implements Usecase<User, NoParams> {
   final AuthRepository _authRepository;
+  const UserSignIn(this._authRepository);
 
-  UserSignIn({required this._authRepository});
   @override
   Future<Either<Failure, User>> call(params) async {
     return await _authRepository.signInWithGoogle();

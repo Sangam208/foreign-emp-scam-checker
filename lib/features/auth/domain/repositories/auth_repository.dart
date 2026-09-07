@@ -4,4 +4,6 @@ import 'package:fpdart/fpdart.dart';
 
 abstract interface class AuthRepository {
   Future<Either<Failure, User>> signInWithGoogle();
+  Future<Either<Failure, User>> getCurrentUserData();
+  Future<Either<Failure, void>> logout();
 }

@@ -36,7 +36,7 @@ authRouter.post('/api/signup', async (req, res) => {
 
 authRouter.get('/', auth, async (req, res) => {
     try {
-        const user = User.findById(req.user);
+        const user = await User.findById(req.user);
         res.json({ user, token: req.token })
     } catch (e) {
         res.status(500).json({ error: e.message })
