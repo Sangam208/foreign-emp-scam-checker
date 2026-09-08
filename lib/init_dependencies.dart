@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:foreign_emp_scam_checker/core/config/app_config.dart';
 import 'package:foreign_emp_scam_checker/core/cubit/app_user_cubit.dart';
@@ -16,7 +17,10 @@ import 'package:google_sign_in/google_sign_in.dart';
 final serviceLocator = GetIt.instance;
 
 Future<void> initDependencies() async {
-  await GoogleSignIn.instance.initialize(serverClientId: googleServerClientId);
+  await GoogleSignIn.instance.initialize(
+    clientId: dotenv.env['CLIENT_ID'],
+    serverClientId: googleServerClientId,
+  );
 
   serviceLocator
     ..registerLazySingleton<GoogleSignIn>(

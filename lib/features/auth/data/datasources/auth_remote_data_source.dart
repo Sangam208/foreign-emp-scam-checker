@@ -55,7 +55,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       );
       return UserModel.fromJson(newUser.toJson());
     } on GoogleSignInException catch (e) {
-      throw ServerException("Google sign in failed: ${e.description}");
+      throw ServerException("Google sign in failed: ${e.description} ");
     } on DioException catch (e) {
       if (e.type == DioExceptionType.connectionTimeout ||
           e.type == DioExceptionType.connectionError) {
