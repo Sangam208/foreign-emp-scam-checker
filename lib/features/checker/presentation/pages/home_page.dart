@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:foreign_emp_scam_checker/core/cubit/app_user_cubit.dart';
 import 'package:foreign_emp_scam_checker/core/utils/show_toast.dart';
 import 'package:foreign_emp_scam_checker/features/auth/presentation/bloc/auth_bloc.dart';
@@ -14,6 +15,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) => setState(() {
+    _selectedIndex = index;
+  });
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -200,11 +207,37 @@ class _HomePageState extends State<HomePage> {
         ),
 
         child: BottomNavigationBar(
+          currentIndex: _selectedIndex,
+          selectedItemColor: Colors.green.shade500,
+          unselectedItemColor: Colors.grey.shade700,
+          showSelectedLabels: true,
+          selectedLabelStyle: TextStyle(color: Colors.green.shade500),
+          unselectedLabelStyle: TextStyle(color: Colors.grey.shade700),
           items: [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: ''),
-            BottomNavigationBarItem(icon: Icon(Icons.check), label: ''),
-            BottomNavigationBarItem(icon: Icon(Icons.list), label: ''),
+            BottomNavigationBarItem(
+              icon: FaIcon(FontAwesomeIcons.house, color: Colors.black),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: FaIcon(
+                FontAwesomeIcons.magnifyingGlass,
+              ),
+              label: 'Check',
+            ),
+            BottomNavigationBarItem(
+              icon: FaIcon(FontAwesomeIcons.building),
+              label: 'Agency',
+            ),
+            BottomNavigationBarItem(
+              icon: FaIcon(FontAwesomeIcons.bell),
+              label: 'Alerts',
+            ),
+            BottomNavigationBarItem(
+              icon: FaIcon(FontAwesomeIcons.userGear),
+              label: 'Profile',
+            ),
           ],
+          onTap: _onItemTapped,
         ),
       ),
     );
