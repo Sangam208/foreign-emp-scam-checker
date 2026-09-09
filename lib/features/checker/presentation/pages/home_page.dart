@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:foreign_emp_scam_checker/core/cubit/app_user_cubit.dart';
 import 'package:foreign_emp_scam_checker/core/utils/show_toast.dart';
 import 'package:foreign_emp_scam_checker/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:foreign_emp_scam_checker/features/checker/presentation/widgets/custom_bottom_nav_bar.dart';
 import 'package:foreign_emp_scam_checker/features/checker/presentation/widgets/info_card.dart';
 import 'package:foreign_emp_scam_checker/features/checker/presentation/widgets/recent_checks.dart';
 
@@ -206,37 +206,8 @@ class _HomePageState extends State<HomePage> {
           splashColor: Colors.transparent,
         ),
 
-        child: BottomNavigationBar(
+        child: CustomBottomNavBar(
           currentIndex: _selectedIndex,
-          selectedItemColor: Colors.green.shade500,
-          unselectedItemColor: Colors.grey.shade700,
-          showSelectedLabels: true,
-          selectedLabelStyle: TextStyle(color: Colors.green.shade500),
-          unselectedLabelStyle: TextStyle(color: Colors.grey.shade700),
-          items: [
-            BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.house, color: Colors.black),
-              label: 'Home',
-            ),
-            BottomNavigationBarItem(
-              icon: FaIcon(
-                FontAwesomeIcons.magnifyingGlass,
-              ),
-              label: 'Check',
-            ),
-            BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.building),
-              label: 'Agency',
-            ),
-            BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.bell),
-              label: 'Alerts',
-            ),
-            BottomNavigationBarItem(
-              icon: FaIcon(FontAwesomeIcons.userGear),
-              label: 'Profile',
-            ),
-          ],
           onTap: _onItemTapped,
         ),
       ),
