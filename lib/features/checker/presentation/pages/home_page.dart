@@ -3,8 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:foreign_emp_scam_checker/core/cubit/app_user_cubit.dart';
 import 'package:foreign_emp_scam_checker/core/utils/show_toast.dart';
 import 'package:foreign_emp_scam_checker/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:foreign_emp_scam_checker/features/checker/presentation/widgets/info_card.dart';
-import 'package:foreign_emp_scam_checker/features/checker/presentation/widgets/recent_checks.dart';
+import 'package:foreign_emp_scam_checker/features/checker/presentation/widgets/navbar/custom_bottom_nav_bar.dart';
+import 'package:foreign_emp_scam_checker/features/checker/presentation/widgets/cards/info_card.dart';
+import 'package:foreign_emp_scam_checker/features/checker/presentation/widgets/cards/recent_checks.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -14,6 +15,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) => setState(() {
+    _selectedIndex = index;
+  });
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -199,12 +206,9 @@ class _HomePageState extends State<HomePage> {
           splashColor: Colors.transparent,
         ),
 
-        child: BottomNavigationBar(
-          items: [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: ''),
-            BottomNavigationBarItem(icon: Icon(Icons.check), label: ''),
-            BottomNavigationBarItem(icon: Icon(Icons.list), label: ''),
-          ],
+        child: CustomBottomNavBar(
+          currentIndex: _selectedIndex,
+          onTap: _onItemTapped,
         ),
       ),
     );
