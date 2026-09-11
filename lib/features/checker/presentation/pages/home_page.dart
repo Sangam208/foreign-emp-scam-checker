@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:foreign_emp_scam_checker/core/cubit/app_user_cubit.dart';
 import 'package:foreign_emp_scam_checker/core/utils/show_toast.dart';
 import 'package:foreign_emp_scam_checker/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:foreign_emp_scam_checker/features/checker/presentation/widgets/custom_bottom_nav_bar.dart';
-import 'package:foreign_emp_scam_checker/features/checker/presentation/widgets/info_card.dart';
-import 'package:foreign_emp_scam_checker/features/checker/presentation/widgets/recent_checks.dart';
+import 'package:foreign_emp_scam_checker/features/checker/presentation/widgets/navbar/custom_bottom_nav_bar.dart';
+import 'package:foreign_emp_scam_checker/features/checker/presentation/widgets/cards/info_card.dart';
+import 'package:foreign_emp_scam_checker/features/checker/presentation/widgets/cards/recent_checks.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
