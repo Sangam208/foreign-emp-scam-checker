@@ -2,6 +2,7 @@ const express = require("express");
 
 const mongoose = require("mongoose");
 const authRouter = require("./routes/auth");
+const agencyRouter = require("./routes/agency");
 
 require('dotenv').config();
 
@@ -11,6 +12,7 @@ const app = express();
 
 app.use(express.json());
 app.use(authRouter);
+app.use(agencyRouter);
 
 const DB = process.env.DB_URI;
 
