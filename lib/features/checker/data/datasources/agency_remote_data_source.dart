@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:foreign_emp_scam_checker/core/config/app_config.dart';
 import 'package:foreign_emp_scam_checker/core/errors/exceptions.dart';
 import 'package:foreign_emp_scam_checker/features/checker/data/models/agency_model.dart';
@@ -39,7 +38,6 @@ class AgencyRemoteDataSourceImpl implements AgencyRemoteDataSource {
           )
           .toList();
 
-      debugPrint('Agencies:\n ${agenciesList.length}');
       return agenciesList;
     } catch (e) {
       throw ServerException(e.toString());
