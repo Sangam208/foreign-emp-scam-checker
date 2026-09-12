@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:foreign_emp_scam_checker/features/auth/buttons/custom_scan_button.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:foreign_emp_scam_checker/core/common/widgets/loader.dart';
+import 'package:foreign_emp_scam_checker/core/utils/show_toast.dart';
+import 'package:foreign_emp_scam_checker/features/checker/domain/entities/agency.dart';
+import 'package:foreign_emp_scam_checker/features/checker/presentation/bloc/agency_bloc.dart';
+import 'package:foreign_emp_scam_checker/features/checker/presentation/widgets/buttons/custom_scan_button.dart';
 import 'package:foreign_emp_scam_checker/features/checker/presentation/widgets/cards/agency_details.dart';
+import 'package:foreign_emp_scam_checker/features/checker/presentation/widgets/fields/agency_field.dart';
 import 'package:foreign_emp_scam_checker/features/checker/presentation/widgets/navbar/custom_bottom_nav_bar.dart';
 import 'package:foreign_emp_scam_checker/features/checker/presentation/widgets/rows/report_row.dart';
 
@@ -18,28 +24,38 @@ class _AgencyPageState extends State<AgencyPage> {
     _selectedIndex = index;
   });
 
-  List<Map<String, dynamic>> agenciesList = [
-    {
-      "name": "ABC company",
-      "license no.": "989387383",
-    },
-    {
-      "name": "XYZ company",
-      "license no.": "980288983",
-    },
-    {
-      "name": "OIH company",
-      "license no.": "989318983",
-    },
-    {
-      "name": "EWA company",
-      "license no.": "987288983",
-    },
-    {
-      "name": "IFO company",
-      "license no.": "970388983",
-    },
-  ];
+  List<Agency> agencies = [];
+
+  List<DropdownMenuEntry<Agency>> entries = [];
+
+  bool _isStartScan = false;
+
+  void _checkAgencySelection() {
+    setState(() {
+      if (_agencyController.text.trim().isEmpty) {
+        showToast('Please choose an agency');
+      }
+      _isStartScan = true;
+    });
+  }
+
+  @override
+  void initState() {
+    context.read<AgencyBloc>().add(AgencyLoadData());
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    _agencyController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,106 +68,182 @@ class _AgencyPageState extends State<AgencyPage> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              DropdownMenu(
-                controller: _agencyController,
-                label: Text('Select a company'),
-
-                helperText: 'Please choose a company you\'d like to check',
-                enableSearch: true,
-                width: double.infinity,
-                dropdownMenuEntries: <DropdownMenuEntry<Map<String, dynamic>>>[
-                  for (int i = 0; i < agenciesList.length; i++)
+          child: BlocConsumer<AgencyBloc, AgencyState>(
+            listener: (context, state) {
+              if (state is AgencyFailure) showToast(state.message);
+              if (state is AgencySuccess) {
+                entries = [
+                  for (final agency in state.agenciesList)
                     DropdownMenuEntry(
-                      style: ButtonStyle(),
-                      value: agenciesList[i],
-                      label: agenciesList[i]['name'],
+                      value: agency,
+                      label: agency.agencyName,
                     ),
-                ],
-              ),
+                ];
+              }
+            },
+            builder: (context, state) {
+              agencies = state is AgencySuccess ? state.agenciesList : [];
 
-              const SizedBox(height: 20),
+              final selectedAgency = agencies
+                  .where(
+                    (agency) =>
+                        agency.agencyName == _agencyController.text.trim(),
+                  )
+                  .firstOrNull;
 
-              CustomScanButton(
-                icon: Icons.check_circle_outline_rounded,
-                label: 'Start Scan',
-              ),
+              bool showDetails =
+                  state is AgencySuccess &&
+                  _isStartScan &&
+                  _agencyController.text.trim().isNotEmpty;
 
-              const SizedBox(height: 20),
-
-              // Status row
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Company name',
-                    style: TextStyle(fontSize: 17),
+                  // DropdownMenu displaying list of agencies
+                  AgencyField(
+                    agencyController: _agencyController,
+                    agencies: agencies,
+                    entries: entries,
                   ),
 
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Color.fromRGBO(105, 249, 151, 0.2),
-                      border: BoxBorder.all(
-                        color: Color.fromRGBO(81, 243, 133, 0.4),
-                      ),
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                    ),
-                    padding: EdgeInsets.all(8.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Icon(
-                          Icons.verified_outlined,
-                          size: 20,
-                          color: Colors.green,
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Verified Agency',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.green,
+                  const SizedBox(height: 20),
+
+                  CustomScanButton(
+                    icon: Icons.check_circle_outline_rounded,
+                    label: 'Start Scan',
+                    onPressed: _checkAgencySelection,
+                  ),
+
+                  if (showDetails)
+                    state is AgencyLoading
+                        ? const Loader()
+                        : selectedAgency != null
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 20),
+
+                              // Status row
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.6,
+                                    child: Text(
+                                      _agencyController.text.trim(),
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(fontSize: 17),
+                                    ),
+                                  ),
+
+                                  const SizedBox(width: 5),
+
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: Color.fromRGBO(
+                                          105,
+                                          249,
+                                          151,
+                                          0.2,
+                                        ),
+                                        border: BoxBorder.all(
+                                          color: Color.fromRGBO(
+                                            81,
+                                            243,
+                                            133,
+                                            0.4,
+                                          ),
+                                        ),
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(20),
+                                        ),
+                                      ),
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Icon(
+                                            Icons.verified_outlined,
+                                            size: 20,
+                                            color: Colors.green,
+                                          ),
+                                          const SizedBox(width: 8),
+                                          Text(
+                                            'Verified',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.green,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              const SizedBox(height: 10),
+
+                              // Reports Card
+                              AgencyDetails(
+                                children: [
+                                  ReportRow(
+                                    label: 'License no.',
+                                    value: selectedAgency.licenseNo,
+                                  ),
+                                  const Divider(),
+                                  ReportRow(
+                                    label: 'Location',
+                                    value: selectedAgency.address,
+                                  ),
+                                  const Divider(),
+                                  ReportRow(
+                                    label: 'Status',
+                                    value: selectedAgency.status,
+                                  ),
+                                  const Divider(),
+                                  ReportRow(
+                                    label: 'Contact Person',
+                                    value: selectedAgency.contactPerson,
+                                  ),
+                                  const Divider(),
+                                  ReportRow(
+                                    label: 'Phone no./Fax',
+                                    value: selectedAgency.phoneFax,
+                                  ),
+                                  const Divider(),
+                                  ReportRow(
+                                    label: 'Email/Website',
+                                    value: selectedAgency.emailOrWebsite,
+                                  ),
+                                ],
+                              ),
+
+                              // const SizedBox(height: 5),
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: SelectableText(
+                                  'Source: DoFE-compiled registry • Last verified as of July 6, 2026',
+                                  style: TextStyle(
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        : Center(
+                            child: const Text(
+                              'No data available. Please try again later.',
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
                 ],
-              ),
-
-              const SizedBox(height: 10),
-
-              // Reports Card
-              AgencyDetails(
-                children: [
-                  ReportRow(label: 'License no.', value: '1011'),
-                  const Divider(),
-                  ReportRow(label: 'Location', value: 'address_location'),
-                  const Divider(),
-                  ReportRow(label: 'Status', value: 'Active'),
-                  const Divider(),
-                  ReportRow(label: 'Contact Person', value: 'Person'),
-                  const Divider(),
-                  ReportRow(label: 'Phone no.', value: '9743...'),
-                  const Divider(),
-                  ReportRow(label: 'Website', value: 'site_web'),
-                ],
-              ),
-
-              // const SizedBox(height: 5),
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: SelectableText(
-                  'Source: DoFE-compiled registry • Last verified as of July 6, 2026',
-                  style: TextStyle(
-                    fontStyle: FontStyle.italic,
-                  ),
-                ),
-              ),
-            ],
+              );
+            },
           ),
         ),
       ),
