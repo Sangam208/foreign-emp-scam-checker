@@ -46,11 +46,6 @@ class _AgencyPageState extends State<AgencyPage> {
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-  }
-
-  @override
   void dispose() {
     _agencyController.dispose();
     super.dispose();
