@@ -1,0 +1,14 @@
+import 'package:flutter/material.dart';
+
+class AlertPage extends StatelessWidget {
+  const AlertPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: const Text('Alerts will come soon...'),
+      ),
+    );
+  }
+}

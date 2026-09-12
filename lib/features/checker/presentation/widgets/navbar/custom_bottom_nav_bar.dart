@@ -24,6 +24,7 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
       ),
       child: BottomNavigationBar(
         currentIndex: widget.currentIndex,
+        type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.green.shade500,
         unselectedItemColor: Colors.grey.shade700,
         showSelectedLabels: true,
