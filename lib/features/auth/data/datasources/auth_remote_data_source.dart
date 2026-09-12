@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:foreign_emp_scam_checker/core/config/app_config.dart';
 import 'package:foreign_emp_scam_checker/core/errors/exceptions.dart';
 import 'package:foreign_emp_scam_checker/features/auth/data/models/user_model.dart';
@@ -73,7 +72,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<UserModel> getCurrentUserData(String token) async {
     try {
-      final tokenHeader = dotenv.env['TOKEN_HEADER'] ?? '';
       var response = await _client.get(
         '$host/',
         options: Options(

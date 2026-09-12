@@ -1,14 +1,14 @@
 import 'package:foreign_emp_scam_checker/core/entities/user.dart';
 import 'package:foreign_emp_scam_checker/core/errors/exceptions.dart';
 import 'package:foreign_emp_scam_checker/core/errors/failure.dart';
-import 'package:foreign_emp_scam_checker/features/auth/data/datasources/auth_local_data_source.dart';
+import 'package:foreign_emp_scam_checker/core/storage/secure_storage.dart';
 import 'package:foreign_emp_scam_checker/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:foreign_emp_scam_checker/features/auth/domain/repositories/auth_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource _authRemoteDataSource;
-  final AuthLocalDataSource _authLocalDataSource;
+  final SecureStorage _authLocalDataSource;
   AuthRepositoryImpl(this._authRemoteDataSource, this._authLocalDataSource);
 
   @override
