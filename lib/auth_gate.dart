@@ -4,7 +4,6 @@ import 'package:foreign_emp_scam_checker/app_shell.dart';
 import 'package:foreign_emp_scam_checker/core/cubit/app_user_cubit.dart';
 import 'package:foreign_emp_scam_checker/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:foreign_emp_scam_checker/features/auth/presentation/screens/login_screen.dart';
-import 'package:foreign_emp_scam_checker/features/checker/presentation/pages/agency_page.dart';
 
 class AuthGate extends StatefulWidget {
   const AuthGate({super.key});
