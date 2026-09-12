@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 class CustomScanButton extends StatelessWidget {
   final IconData icon;
   final String label;
+  final void Function() onPressed;
   const CustomScanButton({
     super.key,
     required this.icon,
     required this.label,
+    required this.onPressed,
   });
 
   @override
@@ -21,7 +23,7 @@ class CustomScanButton extends StatelessWidget {
           borderRadius: BorderRadiusGeometry.circular(10),
         ),
       ),
-      onPressed: () {},
+      onPressed: onPressed,
       icon: Icon(icon),
       label: Text(
         label,

@@ -17,8 +17,18 @@ class ReportRow extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label),
-          Text(value),
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.4,
+            child: Text(label),
+          ),
+
+          Expanded(
+            child: Text(
+              value,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
+          ),
         ],
       ),
     );
