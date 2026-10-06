@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:foreign_emp_scam_checker/alert_page.dart';
 import 'package:foreign_emp_scam_checker/features/checker/presentation/pages/agency_page.dart';
 import 'package:foreign_emp_scam_checker/features/checker/presentation/pages/home_page.dart';
+import 'package:foreign_emp_scam_checker/features/job/presentation/screens/job_screen.dart';
 import 'package:foreign_emp_scam_checker/features/checker/presentation/widgets/navbar/custom_bottom_nav_bar.dart';
-import 'package:foreign_emp_scam_checker/job_page.dart';
 import 'package:foreign_emp_scam_checker/profile_page.dart';
 
 class AppShell extends StatefulWidget {
